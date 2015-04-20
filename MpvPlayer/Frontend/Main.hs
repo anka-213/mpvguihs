@@ -85,7 +85,7 @@ closeFile appRef = do
 showOpenDialog :: IORef App -> IO ()
 showOpenDialog appRef = do
   app <- readIORef appRef
-  dialog <- fileChooserDialogNew Nothing 
+  dialog <- fileChooserDialogNew (Nothing :: Maybe String)
             (Just $ mainWindow $ appHandles app) FileChooserActionOpen []
   dialogAddButton dialog "gtk-cancel" $ ResponseUser 0
   dialogAddButton dialog "gtk-open" $ ResponseUser 1

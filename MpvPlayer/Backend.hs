@@ -4,7 +4,7 @@ import Data.List
 import Data.Word
 import Data.IORef
 import Data.Maybe
-import System.Process
+import System.Process hiding (createPipe)
 import System.IO
 import System.Posix.IO
 import System.Directory
