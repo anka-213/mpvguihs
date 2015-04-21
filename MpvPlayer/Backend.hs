@@ -1,6 +1,7 @@
 module MpvPlayer.Backend where
 
 import Data.List
+import Data.List.Split (splitOn)
 import Data.Word
 import Data.IORef
 import Data.Maybe
@@ -72,8 +73,8 @@ parseLines ps readHandle = do
   info <- getResponse cmdPrefix readHandle
   case info of
     Nothing -> return ps
-    Just i  -> 
-      let [len, r, p, m, vol, fs] = words i
+    Just i  ->
+      let [len, r, p, m, vol, fs] = words' i
           len' = fromMaybe 0.0 $ readMaybe len
           r' = fromMaybe 0.0 $ readMaybe r
           paused = p == "yes"
@@ -86,6 +87,7 @@ parseLines ps readHandle = do
                                        muted 
                                        vol' 
                                        fullscreen) readHandle
+  where words' = splitOn " " -- Behaves better than "words"
 
 hPutStrLnSafe :: Handle -> String -> IO ()
 hPutStrLnSafe h str = catch (hPutStrLn h str) ignoreException
