@@ -2,12 +2,14 @@ module MpvPlayer.Backend where
 
 import Data.List
 import Data.List.Split (splitOn)
+import Data.Bits
 import Data.Word
 import Data.IORef
 import Data.Maybe
 import System.Process hiding (createPipe)
 import System.IO
 import System.Posix.IO
+import System.Posix.Files
 import System.Directory
 import Text.Printf
 import Text.Read
@@ -120,7 +122,7 @@ mpvPlay wid filename extraArgs = do
   (cmdFile, cmdHandle) <- openTempFile tmpDir "mpvguihs"
   hClose cmdHandle         
   removeFile cmdFile
-  system $ "mkfifo " ++ cmdFile
+  createNamedPipe cmdFile (ownerReadMode  .|. ownerWriteMode)
 
   let args = buildArgs wid cmdFile filename extraArgs
   putStrLn $ "Launching mpv with args: " ++ show args
